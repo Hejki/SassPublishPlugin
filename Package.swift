@@ -10,6 +10,7 @@ import PackageDescription
 
 let package = Package(
     name: "SassPublishPlugin",
+    platforms: [.macOS(.v12)],
     products: [
         .library(
             name: "SassPublishPlugin",
