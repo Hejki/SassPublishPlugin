@@ -18,13 +18,16 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/johnsundell/publish.git", from: "0.1.0"),
-        .package(url: "https://github.com/robinwalterfit/Swift-Sass.git", from: "1.0.1"),
+        .package(url: "https://github.com/johnsundell/publish.git", from: "0.9.0"),
+        .package(url: "https://github.com/JohnSundell/ShellOut.git", from: "2.0.0")
     ],
     targets: [
         .target(
             name: "SassPublishPlugin",
-            dependencies: ["Sass", "Publish"]
+            dependencies: [
+                .product(name: "Publish", package: "publish"),
+                "ShellOut",
+            ]
         ),
         .testTarget(
             name: "SassPublishPluginTests",

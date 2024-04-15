@@ -5,37 +5,24 @@
  */
 
 import Publish
-import Sass
+import ShellOut
 
 public extension Plugin {
 
     static func compileSass(sassFilePath: Path, cssFilePath: Path, compressed: Bool = false) -> Self {
-        compileSass(sassFilePath: sassFilePath, cssFilePath: cssFilePath) { options in
-            if compressed {
-                options.setOutputStyle(.compact)
-                options.setSourceComments(false)
-                options.setSourceMapEmbed(false)
-                options.setOmitSourceMapUrl(true)
-                options.setSourceMapContents(false)
-                options.setSourceMapFileUrls(false)
-            } else {
-                options.setOutputStyle(.expanded)
-                options.setSourceComments(true)
-            }
-        }
-    }
-
-    static func compileSass(sassFilePath: Path, cssFilePath: Path, optionsModifier: @escaping (Sass.Options) -> Void) -> Self {
         Plugin(name: "Sass") { context in
             let sassFile = try context.file(at: sassFilePath)
             let cssFile = try context.createOutputFile(at: cssFilePath)
-            let sass = Sass(input: sassFile.path, outputFile: cssFile.path)
-
-            if let options = sass.options {
-                optionsModifier(options)
+            
+            var args: [String] = []
+            
+            if compressed {
+                args += ["--style=compressed", "--no-embed-sources"]
             }
+            args += [sassFile.path, cssFile.path]
+            
             do {
-                try sass.compile()
+                try shellOut(to: "sass", arguments: args)
             } catch {
                 print(error)
             }

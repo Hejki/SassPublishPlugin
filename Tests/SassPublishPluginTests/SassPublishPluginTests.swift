@@ -40,9 +40,7 @@ final class SassPublishPluginTests: XCTestCase {
     func testCompileSassCustomOptions() throws {
         try Web().publish(at: Self.testDirPath, using: [
             .installPlugin(
-                .compileSass(sassFilePath: sass, cssFilePath: css) {
-                    $0.setOutputStyle(.expanded)
-                }
+                .compileSass(sassFilePath: sass, cssFilePath: css, compressed: false)
             )
         ])
 
